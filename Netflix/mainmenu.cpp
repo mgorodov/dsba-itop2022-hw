@@ -37,7 +37,6 @@ void MainMenu::setupUI()
 
     menuLabel = new QLabel("Main menu");
     menuLabel->setFont(QFont("Montserrat", 30));
-    //menuLabel->setAlignment(Qt::AlignCenter);
     menuLabel->setStyleSheet("background-color: #24252A; color: #FFFFFF; padding: 15; border-bottom: 1px solid #FFFFFF");
 
     QVBoxLayout* btns = new QVBoxLayout;

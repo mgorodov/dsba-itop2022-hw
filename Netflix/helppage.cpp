@@ -16,6 +16,7 @@ void HelpPage::setupUI()
     resize(400, 600);
 
     logoWidget = new LogoWidget();
+    logoWidget->setStyleSheet("padding: 20; margin: 20;");
 
     aboutBtn = new QPushButton("ABOUT");
     aboutBtn->setFont(QFont("Montserrat", 20));
@@ -77,6 +78,4 @@ void LogoWidget::paintEvent (QPaintEvent *event)
   painter.drawLine(cx-st/5, cy-st/9, cx-st/5-2*st/9, cy-st/3);
   painter.drawLine(cx+st/10, cy-st/9, cx+st/10-2*st/9, cy-st/3);
   painter.drawLine(cx+4*st/10, cy-st/9, cx+4*st/10-2*st/9, cy-st/3);
-
-
 }
