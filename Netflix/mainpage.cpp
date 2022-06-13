@@ -263,6 +263,14 @@ void MainPage::addRows()
     filmModel->addRow();
     masterView->sortByColumn(-1, Qt::SortOrder::AscendingOrder);
     masterView->verticalScrollBar()->setValue(1000);
+    filterIMDBEditL->setText("");
+    filterIMDBEditR->setText("");
+    filterPremiereEditL->setDate(QDate(1800, 1, 1));
+    filterPremiereEditR->setDate(QDate(2022, 1, 1));
+    filterRuntimeEditL->setText("");
+    filterRuntimeEditR->setText("");
+    filterGenreEdit->setText("");
+    filterLanguageEdit->setText("");
 }
 
 void MainPage::deleteRows()
@@ -414,9 +422,9 @@ bool FilterModel::filterAcceptsRow (int sourceRow, const QModelIndex &sourcePare
         return false;
     if(!imdbmax.isEmpty() && sourceModel()->data(imdb).toDouble() > imdbmax.toDouble())
         return false;
-    if(prmin.isValid() && QDate::fromString(sourceModel()->data(premiere).toString(), "dd.MM.yyyy") < prmin)
+    if(prmin != QDate(1800, 1, 1) && prmin.isValid() && QDate::fromString(sourceModel()->data(premiere).toString(), "dd.MM.yyyy") < prmin)
         return false;
-    if(prmax.isValid() && QDate::fromString(sourceModel()->data(premiere).toString(), "dd.MM.yyyy") > prmax)
+    if(prmin != QDate(1800, 1, 1) && prmax.isValid() && QDate::fromString(sourceModel()->data(premiere).toString(), "dd.MM.yyyy") > prmax)
         return false;
     if(!runtimemin.isEmpty() && sourceModel()->data(runtime).toDouble() < runtimemin.toDouble())
         return false;
