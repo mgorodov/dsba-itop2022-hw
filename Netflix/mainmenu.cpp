@@ -1,25 +1,26 @@
 #include "mainmenu.h"
-#include <QVBoxLayout>
 #include <QMessageBox>
+#include <QVBoxLayout>
 
-MainMenu::MainMenu(QWidget *parent)
+MainMenu::MainMenu(QWidget* parent)
     : QWidget(parent)
 {
     setupUI();
     connect(startBtn, SIGNAL(clicked()), SLOT(startApp()));
     connect(helpBtn, SIGNAL(clicked()), SLOT(openHelp()));
-
 }
 
 void MainMenu::startApp()
 {
-    if(!mainPage) mainPage = new MainPage();
+    if (!mainPage)
+        mainPage = new MainPage();
     mainPage->show();
 }
 
 void MainMenu::openHelp()
 {
-    if(!helpPage) helpPage = new HelpPage();
+    if (!helpPage)
+        helpPage = new HelpPage();
     helpPage->show();
 }
 
@@ -29,18 +30,21 @@ void MainMenu::setupUI()
     startBtn = new QPushButton("START");
     helpBtn = new QPushButton("HELP");
     startBtn->setFont(QFont("Montserrat", 20));
-    startBtn->setStyleSheet("QPushButton{padding: 20; margin: 10 30; background-color: #0088A9; color: #FFFFFF; border-radius: 15px;}"
+    startBtn->setStyleSheet("QPushButton{padding: 20; margin: 10 30; background-color: #0088A9; "
+                            "color: #FFFFFF; border-radius: 15px;}"
                             "QPushButton:hover{background-color: #1199BA;}");
+
     helpBtn->setFont(QFont("Montserrat", 20));
-    helpBtn->setStyleSheet("QPushButton{padding: 20; margin: 10 30; background-color: #0088A9; color: #FFFFFF; border-radius: 15px;}"
+    helpBtn->setStyleSheet("QPushButton{padding: 20; margin: 10 30; background-color: #0088A9; "
+                           "color: #FFFFFF; border-radius: 15px;}"
                            "QPushButton:hover{background-color: #1199BA;}");
 
     menuLabel = new QLabel("Main menu");
     menuLabel->setFont(QFont("Montserrat", 30));
-    menuLabel->setStyleSheet("background-color: #24252A; color: #FFFFFF; padding: 15; border-bottom: 1px solid #FFFFFF");
+    menuLabel->setStyleSheet("background-color: #24252A; color: #FFFFFF; "
+                             "padding: 15; border-bottom: 1px solid #FFFFFF");
 
     QVBoxLayout* btns = new QVBoxLayout;
-    //btns->setAlignment();
     btns->addStretch();
     btns->addStretch();
     btns->addWidget(startBtn);
@@ -58,7 +62,4 @@ void MainMenu::setupUI()
     setStyleSheet("background-color: #24252A;");
 }
 
-MainMenu::~MainMenu()
-{
-}
-
+MainMenu::~MainMenu() { }

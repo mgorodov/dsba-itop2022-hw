@@ -22,8 +22,10 @@ set(PROJECT_SOURCES
         mainpage.h
         helppage.cpp
         helppage.h
-        #filtermodel.cpp
-        #filtermodel.h
+        filmmodel.cpp
+        filmmodel.h
+        filtermodel.cpp
+        filtermodel.h
         resources.qrc
 )
 
