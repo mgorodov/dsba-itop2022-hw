@@ -17,13 +17,13 @@ class MainMenu : public QWidget
     Q_OBJECT
 public:
     MainMenu(QWidget* parent = nullptr);
-    ~MainMenu();
+    ~MainMenu() override;
 
 private:
     void setupUI();
-    QLabel* menuLabel;
-    QPushButton* startBtn;
-    QPushButton* helpBtn;
+    QLabel* menuLabel = nullptr;
+    QPushButton* startBtn = nullptr;
+    QPushButton* helpBtn = nullptr;
     MainPage* mainPage = nullptr;
     HelpPage* helpPage = nullptr;
 

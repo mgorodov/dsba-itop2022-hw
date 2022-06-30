@@ -14,11 +14,12 @@ class HelpPage : public QWidget
 {
     Q_OBJECT
 public:
-    explicit HelpPage(QWidget* parent = nullptr);
+    HelpPage(QWidget* parent = nullptr);
+    ~HelpPage() override;
 
 private:
-    QPushButton* aboutBtn;
-    LogoWidget* logoWidget;
+    QPushButton* aboutBtn = nullptr;
+    LogoWidget* logoWidget = nullptr;
     void setupUI();
 
 public slots:

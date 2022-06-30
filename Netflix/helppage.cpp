@@ -62,35 +62,14 @@ void LogoWidget::paintEvent(QPaintEvent* event)
     // Brush  fill
     painter.setPen(QPen(Qt::white, 4));
 
-    painter.drawLine(cx - st / 2,
-        cy - st / 3,
-        cx - st / 2 + 0.85 * st,
-        cy - st / 3 - 0.3 * st);
-    painter.drawLine(cx - st / 2,
-        cy - st / 3,
-        cx - st / 2 - 0.2 * 0.3 * st,
-        cy - st / 3 - 0.2 * 0.85 * st);
-    painter.drawLine(cx - st / 2 + 0.85 * st,
-        cy - st / 3 - 0.3 * st,
-        cx - st / 2 + 0.85 * st - 0.2 * 0.3 * st,
-        cy - st / 3 - 0.3 * st - 0.2 * 0.85 * st);
-    painter.drawLine(cx - st / 2 - 0.2 * 0.3 * st,
-        cy - st / 3 - 0.2 * 0.85 * st,
-        cx - st / 2 + 0.85 * st - 0.2 * 0.3 * st,
-        cy - st / 3 - 0.3 * st - 0.2 * 0.85 * st);
+    painter.drawLine(cx - st / 2, cy - st / 3, cx - st / 2 + 0.85 * st, cy - st / 3 - 0.3 * st);
+    painter.drawLine(cx - st / 2, cy - st / 3, cx - st / 2 - 0.2 * 0.3 * st, cy - st / 3 - 0.2 * 0.85 * st);
+    painter.drawLine(cx - st / 2 + 0.85 * st, cy - st / 3 - 0.3 * st, cx - st / 2 + 0.85 * st - 0.2 * 0.3 * st, cy - st / 3 - 0.3 * st - 0.2 * 0.85 * st);
+    painter.drawLine(cx - st / 2 - 0.2 * 0.3 * st, cy - st / 3 - 0.2 * 0.85 * st, cx - st / 2 + 0.85 * st - 0.2 * 0.3 * st, cy - st / 3 - 0.3 * st - 0.2 * 0.85 * st);
 
-    painter.drawLine(cx - st / 2 + 0.2 * 0.85 * st,
-        cy - st / 3 - 0.2 * 0.3 * st,
-        cx - st / 2 + 0.98 * (-0.2 * 0.3 * st + 0.38 * 0.85 * st),
-        cy - st / 3 + 0.98 * (-0.2 * 0.85 * st - 0.38 * 0.3 * st));
-    painter.drawLine(cx - st / 2 + 0.45 * 0.85 * st,
-        cy - st / 3 - 0.45 * 0.3 * st,
-        cx - st / 2 + 0.98 * (-0.2 * 0.3 * st + 0.63 * 0.85 * st),
-        cy - st / 3 + 0.98 * (-0.2 * 0.85 * st - 0.63 * 0.3 * st));
-    painter.drawLine(cx - st / 2 + 0.7 * 0.85 * st,
-        cy - st / 3 - 0.7 * 0.3 * st,
-        cx - st / 2 + 0.98 * (-0.2 * 0.3 * st + 0.88 * 0.85 * st),
-        cy - st / 3 + 0.98 * (-0.2 * 0.85 * st - 0.88 * 0.3 * st));
+    painter.drawLine(cx - st / 2 + 0.2 * 0.85 * st, cy - st / 3 - 0.2 * 0.3 * st, cx - st / 2 + 0.98 * (-0.2 * 0.3 * st + 0.38 * 0.85 * st), cy - st / 3 + 0.98 * (-0.2 * 0.85 * st - 0.38 * 0.3 * st));
+    painter.drawLine(cx - st / 2 + 0.45 * 0.85 * st, cy - st / 3 - 0.45 * 0.3 * st, cx - st / 2 + 0.98 * (-0.2 * 0.3 * st + 0.63 * 0.85 * st), cy - st / 3 + 0.98 * (-0.2 * 0.85 * st - 0.63 * 0.3 * st));
+    painter.drawLine(cx - st / 2 + 0.7 * 0.85 * st, cy - st / 3 - 0.7 * 0.3 * st, cx - st / 2 + 0.98 * (-0.2 * 0.3 * st + 0.88 * 0.85 * st), cy - st / 3 + 0.98 * (-0.2 * 0.85 * st - 0.88 * 0.3 * st));
 
     painter.drawLine(cx - st / 2, cy - st / 3, cx + st / 2, cy - st / 3);
     painter.drawLine(cx - st / 2, cy - st / 3, cx - st / 2, cy + st / 3);
@@ -98,12 +77,13 @@ void LogoWidget::paintEvent(QPaintEvent* event)
     painter.drawLine(cx + st / 2, cy - st / 3, cx + st / 2, cy + st / 3);
 
     painter.drawLine(cx - st / 2, cy - st / 9, cx + st / 2, cy - st / 9);
-    painter.drawLine(
-        cx - st / 5, cy - st / 9, cx - st / 5 - 2 * st / 9, cy - st / 3);
-    painter.drawLine(
-        cx + st / 10, cy - st / 9, cx + st / 10 - 2 * st / 9, cy - st / 3);
-    painter.drawLine(cx + 4 * st / 10,
-        cy - st / 9,
-        cx + 4 * st / 10 - 2 * st / 9,
-        cy - st / 3);
+    painter.drawLine(cx - st / 5, cy - st / 9, cx - st / 5 - 2 * st / 9, cy - st / 3);
+    painter.drawLine(cx + st / 10, cy - st / 9, cx + st / 10 - 2 * st / 9, cy - st / 3);
+    painter.drawLine(cx + 4 * st / 10, cy - st / 9, cx + 4 * st / 10 - 2 * st / 9, cy - st / 3);
+}
+
+HelpPage::~HelpPage()
+{
+    delete aboutBtn;
+    delete logoWidget;
 }

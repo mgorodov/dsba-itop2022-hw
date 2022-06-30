@@ -62,4 +62,11 @@ void MainMenu::setupUI()
     setStyleSheet("background-color: #24252A;");
 }
 
-MainMenu::~MainMenu() { }
+MainMenu::~MainMenu()
+{
+    delete menuLabel;
+    delete startBtn;
+    delete helpBtn;
+    delete mainPage;
+    delete helpPage;
+}

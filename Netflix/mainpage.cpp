@@ -25,6 +25,7 @@ MainPage::MainPage(QWidget* parent)
     connect(filterRuntimeEditR, SIGNAL(textChanged(QString)), filterModel, SLOT(invalidate()));
     connect(filterGenreEdit, SIGNAL(textChanged(QString)), filterModel, SLOT(invalidate()));
     connect(filterLanguageEdit, SIGNAL(textChanged(QString)), filterModel, SLOT(invalidate()));
+    connect(genreSetterBtn, SIGNAL(clicked()), SLOT(openGenreSetter()));
 }
 
 void MainPage::setupUI()
@@ -96,11 +97,19 @@ void MainPage::setupUI()
     languageLabel = new QLabel("Language");
 
     titleEdit = new QLineEdit("");
+
     imdbEdit = new QLineEdit("");
+    imdbEdit->setValidator(new QDoubleValidator(0, 10, 1));
     premiereEdit = new QLineEdit("");
+    premiereEdit->setValidator(new QRegExpValidator(QRegExp("(0[1-9]|[12][0-9]|3[01]).(0[1-9]|[1][0-2]).(19[0-9][0-9]|20[0-9][0-9])")));
     runtimeEdit = new QLineEdit("");
+    runtimeEdit->setValidator(new QIntValidator(1, 300));
     genreEdit = new QLineEdit("");
     languageEdit = new QLineEdit("");
+    genreSetterBtn = new QPushButton("Edit genres");
+    genreSetterBtn->setFont(QFont("Montserrat", 25));
+    genreSetterBtn->setStyleSheet("QPushButton{padding: 10 45; margin: 0 0; background-color: #0088A9; color: #FFFFFF; border-radius: 15px;}"
+                                  "QPushButton:hover{background-color: #1199BA;}");
 
     QGridLayout* details = new QGridLayout;
     details->setContentsMargins(0, 0, 0, 0);
@@ -121,6 +130,7 @@ void MainPage::setupUI()
     details->addWidget(filterGenreEdit, 4, 1, Qt::AlignTop | Qt::AlignHCenter);
     details->addWidget(filterLanguageLabel, 5, 0, Qt::AlignTop);
     details->addWidget(filterLanguageEdit, 5, 1, Qt::AlignTop | Qt::AlignHCenter);
+    details->addWidget(genreSetterBtn, 4, 3, 2, 1, Qt::AlignVCenter | Qt::AlignHCenter);
     details->addWidget(detailsLabel, 6, 0, 1, 4, Qt::AlignBottom | Qt::AlignHCenter);
     details->addWidget(titleLabel, 7, 0, Qt::AlignBottom);
     details->addWidget(titleEdit, 7, 1, 1, 3, Qt::AlignBottom);
@@ -145,6 +155,8 @@ void MainPage::setupUI()
     filterLabel->setStyleSheet("font-weight: 500; font-size 35px;");
     detailsLabel->setStyleSheet("font-weight: 500; font-size 35px;");
 
+    genresModel = new GenresModel;
+    customDelegate = new CustomDelegate(genresModel);
     filmModel = new FilmModel;
     filterModel = new FilterModel(nullptr,
         filterIMDBEditL,
@@ -161,6 +173,7 @@ void MainPage::setupUI()
     masterView = new QTableView;
     masterView->setSortingEnabled(true);
     masterView->setModel(filterModel);
+    masterView->setItemDelegate(customDelegate);
 
     QGridLayout* layout = new QGridLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -250,7 +263,8 @@ void MainPage::addRows()
 {
     filmModel->addRow();
     masterView->sortByColumn(-1, Qt::SortOrder::AscendingOrder);
-    masterView->verticalScrollBar()->setValue(1000);
+    masterView->scrollToBottom();
+    masterView->selectRow(filmModel->m_data.size() - 1);
     filterIMDBEditL->setText("");
     filterIMDBEditR->setText("");
     filterPremiereEditL->setDate(QDate(2010, 1, 1));
@@ -265,7 +279,10 @@ void MainPage::deleteRows()
 {
     if (!masterView->selectionModel()->hasSelection())
         return;
-    filmModel->deleteRow(filterModel->mapToSource(masterView->selectionModel()->selectedIndexes().at(0)));
+    std::unordered_set<size_t> selectedRows;
+    for (const QModelIndex& ind : masterView->selectionModel()->selectedIndexes())
+        selectedRows.insert(filterModel->mapToSource(ind).row());
+    filmModel->deleteRows(selectedRows);
 }
 
 void MainPage::loadDataFunc()
@@ -273,8 +290,7 @@ void MainPage::loadDataFunc()
     auto dir = QFileDialog::getOpenFileName(this, "Open File", QDir::currentPath());
     if (!dir.size())
         return;
-    auto data = loadData(dir);
-    filmModel->setData(data);
+    filmModel->setData(loadData(dir));
     for (int i = 0; i < static_cast<int>(FilmFields::COUNT); ++i)
         masterView->resizeColumnToContents(i);
     masterView->setColumnWidth(0, 200);
@@ -331,6 +347,13 @@ void MainPage::saveData(const QString& dir)
     }
 }
 
+void MainPage::openGenreSetter()
+{
+    if (!genreSetter)
+        genreSetter = new GenreSetter(customDelegate, genresModel);
+    genreSetter->show();
+}
+
 void MainPage::fileFailure()
 {
     QMessageBox alert;
@@ -342,4 +365,55 @@ void MainPage::fileFailure()
                         "QMessageBox QPushButton{font-family: Montserrat; font-size: 15px; padding: 10 50; background-color: #FFC107; color: #000000; border-radius: 5px;}"
                         "QMessageBox QPushButton:hover{background-color: #FFD218;}");
     alert.exec();
+}
+
+MainPage::~MainPage()
+{
+    delete appLabel;
+    delete addBtn;
+    delete delBtn;
+    delete uploadBtn;
+    delete saveBtn;
+
+    delete filterLabel;
+    delete filterIMDBFrom;
+    delete filterIMDBTo;
+    delete filterPremiereFrom;
+    delete filterPremiereTo;
+    delete filterRuntimeFrom;
+    delete filterRuntimeTo;
+    delete filterGenreLabel;
+    delete filterLanguageLabel;
+    delete genreSetterBtn;
+
+    delete titleLabel;
+    delete imdbLabel;
+    delete premiereLabel;
+    delete runtimeLabel;
+    delete genreLabel;
+    delete languageLabel;
+    delete detailsLabel;
+
+    delete filterIMDBEditL;
+    delete filterIMDBEditR;
+    delete filterPremiereEditL;
+    delete filterPremiereEditR;
+    delete filterRuntimeEditL;
+    delete filterRuntimeEditR;
+    delete filterGenreEdit;
+    delete filterLanguageEdit;
+
+    delete titleEdit;
+    delete imdbEdit;
+    delete premiereEdit;
+    delete runtimeEdit;
+    delete genreEdit;
+    delete languageEdit;
+
+    delete masterView;
+    delete filmModel;
+    delete filterModel;
+    delete customDelegate;
+    delete genreSetter;
+    delete genresModel;
 }

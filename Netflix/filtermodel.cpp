@@ -64,9 +64,9 @@ bool FilterModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParen
         return false;
     if (!runtimemax.isEmpty() && sourceModel()->data(runtime).toDouble() > runtimemax.toDouble())
         return false;
-    if (!genreReq.isEmpty() && sourceModel()->data(genre).toString() != genreReq)
+    if (!genreReq.isEmpty() && !sourceModel()->data(genre).toString().contains(QRegExp(genreReq, Qt::CaseInsensitive)))
         return false;
-    if (!languageReq.isEmpty() && sourceModel()->data(language).toString() != languageReq)
+    if (!languageReq.isEmpty() && !sourceModel()->data(language).toString().contains(QRegExp(languageReq, Qt::CaseInsensitive)))
         return false;
     return true;
 }

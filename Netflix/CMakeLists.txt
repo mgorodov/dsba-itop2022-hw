@@ -26,6 +26,14 @@ set(PROJECT_SOURCES
         filmmodel.h
         filtermodel.cpp
         filtermodel.h
+        customdelegate.cpp
+        customdelegate.h
+        genresetter.cpp
+        genresetter.h
+        genresmodel.h
+        genresmodel.cpp
+        multiselectcombobox.cpp
+        multiselectcombobox.h
         resources.qrc
 )
 
