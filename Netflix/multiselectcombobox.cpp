@@ -95,10 +95,16 @@ QStringList MultiSelectComboBox::currentText()
 {
     QStringList emptyStringList;
     if (!mLineEdit->text().isEmpty())
-    {
         emptyStringList = mLineEdit->text().split('/');
-    }
     return emptyStringList;
+}
+
+QString MultiSelectComboBox::currentStringText()
+{
+    QString emptyString;
+    if (!mLineEdit->text().isEmpty())
+        emptyString = mLineEdit->text();
+    return emptyString;
 }
 
 void MultiSelectComboBox::addItems(const QStringList& aTexts)

@@ -10,8 +10,8 @@
 #include "customdelegate.h"
 #include "filmmodel.h"
 #include "filtermodel.h"
-#include "genresetter.h"
-#include "genresmodel.h"
+#include "gigamodel.h"
+#include "gigasetter.h"
 #include <QFileDialog>
 #include <QGridLayout>
 #include <QGroupBox>
@@ -28,6 +28,7 @@
 #include <QVariant>
 #include <QWidget>
 #include <fstream>
+#include <set>
 #include <sstream>
 #include <unordered_set>
 
@@ -37,6 +38,8 @@ class MainPage : public QWidget
 public:
     MainPage(QWidget* parent = nullptr);
     ~MainPage() override;
+    std::vector<QString> genresArr;
+    std::vector<QString> languagesArr;
 
 private:
     QLabel* appLabel = nullptr;
@@ -86,8 +89,9 @@ private:
     FilmModel* filmModel = nullptr;
     FilterModel* filterModel = nullptr;
     CustomDelegate* customDelegate = nullptr;
-    GenreSetter* genreSetter = nullptr;
-    GenresModel* genresModel = nullptr;
+    GigaSetter* gigaSetter = nullptr;
+    GigaModel* genresModel = nullptr;
+    GigaModel* languagesModel = nullptr;
 
     std::vector<Film> loadData(const QString& dir);
     void saveData(const QString& dir);

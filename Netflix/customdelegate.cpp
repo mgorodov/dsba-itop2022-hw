@@ -1,8 +1,9 @@
 #include "customdelegate.h"
 
-CustomDelegate::CustomDelegate(GenresModel* _genresModel, QObject* parent)
+CustomDelegate::CustomDelegate(GigaModel* _genresModel, GigaModel* _languagesModel, QObject* parent)
     : QStyledItemDelegate(parent)
     , genresModel(_genresModel)
+    , languagesModel(_languagesModel)
 {
 }
 
@@ -33,9 +34,18 @@ QWidget* CustomDelegate::createEditor(QWidget* parent, const QStyleOptionViewIte
 {
     if (static_cast<FilmFields>(index.column()) == FilmFields::genre)
     {
-        QComboBox* editor = new QComboBox(parent);
+        MultiSelectComboBox* editor = new MultiSelectComboBox(parent);
         editor->setFrame(false);
         for (const QString& g : genresModel->m_data)
+            editor->addItem(g);
+
+        return editor;
+    }
+    if (static_cast<FilmFields>(index.column()) == FilmFields::language)
+    {
+        MultiSelectComboBox* editor = new MultiSelectComboBox(parent);
+        editor->setFrame(false);
+        for (const QString& g : languagesModel->m_data)
             editor->addItem(g);
 
         return editor;
@@ -54,21 +64,21 @@ void CustomDelegate::setEditorData(QWidget* editor, const QModelIndex& index) co
 {
     QVariant value = index.model()->data(index, Qt::EditRole);
 
-    QComboBox* comboBox = dynamic_cast<QComboBox*>(editor);
+    MultiSelectComboBox* comboBox = dynamic_cast<MultiSelectComboBox*>(editor);
     QLineEdit* lineEdit = dynamic_cast<QLineEdit*>(editor);
     if (comboBox)
-        comboBox->setCurrentText(value.toString());
+        comboBox->setCurrentText(value.toString().split('/'));
     if (lineEdit)
         lineEdit->setText(value.toString());
 }
 
 void CustomDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
 {
-    QComboBox* comboBox = dynamic_cast<QComboBox*>(editor);
+    MultiSelectComboBox* comboBox = dynamic_cast<MultiSelectComboBox*>(editor);
     QLineEdit* lineEdit = dynamic_cast<QLineEdit*>(editor);
 
     if (comboBox)
-        model->setData(index, comboBox->currentText(), Qt::EditRole);
+        model->setData(index, comboBox->currentStringText(), Qt::EditRole);
     if (lineEdit)
         model->setData(index, lineEdit->text(), Qt::EditRole);
 }

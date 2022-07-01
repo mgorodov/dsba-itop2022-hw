@@ -2,6 +2,20 @@
 
 MainPage::MainPage(QWidget* parent)
     : QWidget(parent)
+    , genresArr {
+        "Action", "Adventure", "Aftershow", "Animation", "Anime", "Anthology",
+        "Biopic", "Black humour", "Christmas", "Comedy", "Coming-of-age", "Crime",
+        "Documentary", "Drama", "Family", "Fantasy", "Heist film", "Horror", "Historical-epic",
+        "Mentalism special", "Musical", "One-man show",
+        "Political thriller", "Psychological thriller",
+        "Romance", "Romantic comedy", "Romantic drama",
+        "Satire", "Science fiction", "Short", "Sports drama",
+        "Spy thriller", "Superhero", "Supernatural drama",
+        "Teen comedy horror", "Thriller",
+        "Urban fantasy", "Variety show", "War",
+        "Western", "Zombie"
+    }
+    , languagesArr { "Akan", "Arabic", "Bengali", "Dutch", "English", "Filipino", "French", "Georgian", "German", "Hindi", "Indonesian", "Italian", "Korean", "Mandarin", "Malay", "Marathi", "Norwegian", "Polish", "Portuguese", "Russian", "Spanish", "Swedish", "Thai", "Turkish", "Japanese" }
 {
     setupUI();
     connect(addBtn, SIGNAL(clicked()), SLOT(addRows()));
@@ -80,11 +94,15 @@ void MainPage::setupUI()
     filterLanguageLabel = new QLabel("Language ");
 
     filterIMDBEditL = new QLineEdit("");
+    filterIMDBEditL->setValidator(new QDoubleValidator(0, 10, 1));
     filterIMDBEditR = new QLineEdit("");
+    filterIMDBEditL->setValidator(new QDoubleValidator(0, 10, 1));
     filterPremiereEditL = new QDateEdit(QDate(2010, 1, 1));
     filterPremiereEditR = new QDateEdit(QDate(2022, 1, 1));
     filterRuntimeEditL = new QLineEdit("");
+    filterRuntimeEditL->setValidator(new QIntValidator(1, 300));
     filterRuntimeEditR = new QLineEdit("");
+    filterRuntimeEditL->setValidator(new QIntValidator(1, 300));
     filterGenreEdit = new QLineEdit("");
     filterLanguageEdit = new QLineEdit("");
 
@@ -155,8 +173,9 @@ void MainPage::setupUI()
     filterLabel->setStyleSheet("font-weight: 500; font-size 35px;");
     detailsLabel->setStyleSheet("font-weight: 500; font-size 35px;");
 
-    genresModel = new GenresModel;
-    customDelegate = new CustomDelegate(genresModel);
+    genresModel = new GigaModel(genresArr, "Genres");
+    languagesModel = new GigaModel(languagesArr, "Languages");
+    customDelegate = new CustomDelegate(genresModel, languagesModel);
     filmModel = new FilmModel;
     filterModel = new FilterModel(nullptr,
         filterIMDBEditL,
@@ -265,6 +284,7 @@ void MainPage::addRows()
     masterView->sortByColumn(-1, Qt::SortOrder::AscendingOrder);
     masterView->scrollToBottom();
     masterView->selectRow(filmModel->m_data.size() - 1);
+    masterView->setFocus();
     filterIMDBEditL->setText("");
     filterIMDBEditR->setText("");
     filterPremiereEditL->setDate(QDate(2010, 1, 1));
@@ -290,7 +310,20 @@ void MainPage::loadDataFunc()
     auto dir = QFileDialog::getOpenFileName(this, "Open File", QDir::currentPath());
     if (!dir.size())
         return;
-    filmModel->setData(loadData(dir));
+    std::vector<Film> data = loadData(dir);
+    filmModel->setData(data);
+    std::set<QString> genresSet, languagesSet;
+    for (const Film& g : data)
+    {
+        for (const QString& q : g.data[static_cast<size_t>(FilmFields::genre)].toString().split('/'))
+            genresSet.insert(q);
+        for (const QString& q : g.data[static_cast<size_t>(FilmFields::language)].toString().split('/'))
+            languagesSet.insert(q);
+    }
+    if (genresModel)
+        genresModel->setData(std::vector<QString>(genresSet.begin(), genresSet.end()));
+    if (languagesModel)
+        languagesModel->setData(std::vector<QString>(languagesSet.begin(), languagesSet.end()));
     for (int i = 0; i < static_cast<int>(FilmFields::COUNT); ++i)
         masterView->resizeColumnToContents(i);
     masterView->setColumnWidth(0, 200);
@@ -311,6 +344,8 @@ std::vector<Film> MainPage::loadData(const QString& dir)
             std::stringstream str(row);
             while (std::getline(str, field, ';'))
                 res.data[i++] = QString(field.c_str());
+            if (i < static_cast<int>(FilmFields::COUNT))
+                throw "Bad file";
             result.push_back(res);
         }
         file.close();
@@ -318,6 +353,7 @@ std::vector<Film> MainPage::loadData(const QString& dir)
     catch (...)
     {
         fileFailure();
+        return std::vector<Film>();
     }
     return result;
 }
@@ -349,9 +385,9 @@ void MainPage::saveData(const QString& dir)
 
 void MainPage::openGenreSetter()
 {
-    if (!genreSetter)
-        genreSetter = new GenreSetter(customDelegate, genresModel);
-    genreSetter->show();
+    if (!gigaSetter)
+        gigaSetter = new GigaSetter(customDelegate, genresModel, languagesModel);
+    gigaSetter->show();
 }
 
 void MainPage::fileFailure()
@@ -414,6 +450,7 @@ MainPage::~MainPage()
     delete filmModel;
     delete filterModel;
     delete customDelegate;
-    delete genreSetter;
+    delete gigaSetter;
     delete genresModel;
+    delete languagesModel;
 }

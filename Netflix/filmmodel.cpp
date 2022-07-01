@@ -51,7 +51,7 @@ bool FilmModel::setData(const QModelIndex& index, const QVariant& value, int rol
 {
     if (index.isValid() && role == Qt::EditRole)
     {
-        m_data[index.row()].data[index.column()] = value.toString();
+        m_data[index.row()].data[index.column()] = value.toString(); //List().join('/');
         emit dataChanged(index, index);
         return true;
     }

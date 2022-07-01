@@ -1,6 +1,11 @@
+/*
+      Delegate used for wrapping cells in table on main page derived from QTableView.
+      This delegate creates two types of editors: MultiSelectComboBox and QLineEdit as well as validators for them
+*/
+
 #pragma once
 #include "filmmodel.h"
-#include "genresmodel.h"
+#include "gigamodel.h"
 #include "multiselectcombobox.h"
 #include <QColor>
 #include <QComboBox>
@@ -11,13 +16,13 @@
 #include <QRegExpValidator>
 #include <QStyledItemDelegate>
 
-class GenreSetter;
+class GigaSetter;
 class CustomDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 
 public:
-    CustomDelegate(GenresModel* _genresModel, QObject* parent = nullptr);
+    CustomDelegate(GigaModel* _genresModel, GigaModel* _languagesModel, QObject* parent = nullptr);
 
     void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
 
@@ -28,6 +33,7 @@ public:
     void updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
 
 private:
-    GenresModel* genresModel = nullptr;
-    friend class GenreSetter;
+    GigaModel* genresModel = nullptr;
+    GigaModel* languagesModel = nullptr;
+    friend class GigaSetter;
 };

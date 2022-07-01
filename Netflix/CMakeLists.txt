@@ -28,10 +28,10 @@ set(PROJECT_SOURCES
         filtermodel.h
         customdelegate.cpp
         customdelegate.h
-        genresetter.cpp
-        genresetter.h
-        genresmodel.h
-        genresmodel.cpp
+        gigasetter.cpp
+        gigasetter.h
+        gigamodel.h
+        gigamodel.cpp
         multiselectcombobox.cpp
         multiselectcombobox.h
         resources.qrc

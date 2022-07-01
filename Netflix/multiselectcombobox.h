@@ -1,3 +1,9 @@
+/*
+    Actually I copyed it from https://github.com/ThisIsClark/Qt-MultiSelectComboBox and only
+    1)changed separator to '/'
+    2)added function currentStringText() to return just QString instead of QStringList
+*/
+
 #pragma once
 
 #include <QComboBox>
@@ -12,6 +18,7 @@ public:
     void addItem(const QString& aText, const QVariant& aUserData = QVariant());
     void addItems(const QStringList& aTexts);
     QStringList currentText();
+    QString currentStringText();
     int count() const;
     void hidePopup() override;
     void SetSearchBarPlaceHolderText(const QString& aPlaceHolderText);
